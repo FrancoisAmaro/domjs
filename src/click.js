@@ -1,43 +1,46 @@
 let incrementarButton = document.getElementById('incrementarButton');
+let incremento; // Inicializada, será definida no onload
 
-let incremento =
-  localStorage.getItem('incremento') == null
-    ? { valor: 1 }
-    : JSON.parse(localStorage.getItem('incremento'));
-//  condicao ? verdadeira : falsa
-// if (localStorage.getItem('incremento') == null) {
-// }
-let j = 1;
-while (j < incremento.valor) {
-  // Recuperar o elemento da lista desordenada
-  let itensUl = document.getElementById('itensUl');
-  // Adicionar o item com o valor do incremento da lista desordenada.
-  itensUl.insertAdjacentHTML('beforeend', `<li>${j}</li>`);
-  j++;
+// --- Função de Carga Inicial ---
+function carregarIncremento() {
+
+    // 1. Carregar valor do incremento do localStorage ou iniciar com 1.
+    let incrementoSalvo = localStorage.getItem('incremento');
+    incremento = incrementoSalvo ? JSON.parse(incrementoSalvo) : { valor: 1 };
+
+    // 2. Recarregar na tela os itens já armazenados.
+    let itensUl = document.getElementById('itensUl');
+    let j = 1;
+    while (j < incremento.valor) {
+        itensUl.insertAdjacentHTML('beforeend', `<li>${j}</li>`);
+        j++;
+    }
 }
 
-// Evento de click do botão incrementar.
-incrementarButton.onclick = (event) => {
-  // Recuperar o elemento da lista desordenada
-  let itensUl = document.getElementById('itensUl');
-  // Adicionar o item com o valor do incremento da lista desordenada.
-  itensUl.insertAdjacentHTML('beforeend', `<li>${incremento.valor}</li>`);
+// 3. Executa carregarIncremento quando a página terminar de carregar.
+window.onload = carregarIncremento;
 
-  // Guardar o valor do incremento numa estrutura de armazenamento: local storage.
-  // O valor deverá ser persistido em formato json através de uma string.
-  incremento.valor++;
-  localStorage.setItem('incremento', JSON.stringify(incremento));
+// --- Eventos do Botão ---
+
+incrementarButton.onclick = () => {
+    let itensUl = document.getElementById('itensUl');
+
+    // Adiciona item atual
+    itensUl.insertAdjacentHTML('beforeend', `<li>${incremento.valor}</li>`);
+
+    // Atualiza e salva no localStorage
+    incremento.valor++;
+    localStorage.setItem('incremento', JSON.stringify(incremento));
 };
 
-incrementarButton.onmouseover = (event) => {
-  incrementarButton.style.backgroundColor = 'blue';
+incrementarButton.onmouseover = () => {
+    incrementarButton.style.backgroundColor = 'blue';
 };
 
-incrementarButton.onmouseout = (event) => {
-  incrementarButton.style.backgroundColor = 'gray';
+incrementarButton.onmouseout = () => {
+    incrementarButton.style.backgroundColor = 'gray';
 };
 
-incrementarButton.addEventListener('dblclick', (event) => {
-  console.log('Clicou no dblclick');
+incrementarButton.addEventListener('dblclick', () => {
+    console.log('Clicou no dblclick');
 });
-// callback
